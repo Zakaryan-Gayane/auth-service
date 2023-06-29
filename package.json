@@ -1,5 +1,5 @@
 {
-  "name": "nodeservice",
+  "name": "node-service",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,6 +19,7 @@
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
     "express-validator": "^7.0.1",
+    "kafka-node": "^5.0.0",
     "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^10.9.1",

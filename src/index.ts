@@ -1,34 +1,44 @@
 import express from "express";
-import http from "http"
 import cors from 'cors';
 import "express-async-errors";
 import { json } from "body-parser";
-import { EntityNotFoundError } from "typeorm";
 import { dbConnect } from "./db/connect";
+import http from "http"
+import { kafka } from "./brokers/kafka";
+import { NotFoundError } from "./errors/not-found-error";
+import { errorHandler } from "./middlewares/error-handler";
 
 const port = process.env.PORT;
+const kafkaHost = process.env.KAFKA_HOST || "kafka:9092";
 const app = express()
 app.set("trust proxy", true);
 app.use(json());
 app.use(cors());
 
-app.get("/health", (req, res) => {
+
+app.get("/super", (req, res) => {
     return res.json("OK");
 });
-// app.use(indexRouter)
-// app.all("*", async (req, res) => {
-//   throw new EntityNotFoundError();
-// });
-// app.use(errorHandler);
+
+
+app.all("*", async (req, res) => {
+    throw new NotFoundError();;
+});
+app.use(errorHandler);
 
 const httpServer = http.createServer(app);
-
 const start = async () => {
-    await dbConnect();
+    if (!process.env.JWT_KEY) {
+        throw new Error("JWT_KEY must be defined");
+    }
     try {
-        app.listen(port, () => {
-            console.log(`Listening on port ${port}!`);
-        });
+        await dbConnect();
+        await kafka.connect(kafkaHost);
+
+        httpServer.listen(port, () =>
+            console.info(`Secure app listening on port ${port}`)
+        );
+
     } catch (error) {
         console.log(error);
 
