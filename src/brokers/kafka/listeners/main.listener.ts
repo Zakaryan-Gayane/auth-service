@@ -25,8 +25,5 @@ export abstract class Listener {
       this.onMessage(message);
     });
 
-    // this.consumer!.on('error', (error) => {
-    //     reject(error);
-    // })
   }
 }
