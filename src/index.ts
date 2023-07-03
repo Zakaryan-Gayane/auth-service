@@ -7,6 +7,8 @@ import http from "http"
 import { kafka } from "./brokers/kafka";
 import { NotFoundError } from "./errors/not-found-error";
 import { errorHandler } from "./middlewares/error-handler";
+import { indexRouter } from "./routes";
+
 
 const port = process.env.PORT;
 const kafkaHost = process.env.KAFKA_HOST || "kafka:9092";
@@ -15,7 +17,7 @@ app.set("trust proxy", true);
 app.use(json());
 app.use(cors());
 
-
+app.use(indexRouter)
 app.get("/super", (req, res) => {
     return res.json("OK");
 });
