@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { ActivityLog } from "./company.entity";
+
 import { User } from "./user.entity";
 
 
@@ -16,7 +16,7 @@ export function dbConnect() {
         password: process.env.DB_PASSWORD,
         database: process.env.DB,
         entities: [
-            ActivityLog, User
+        User
         ],
         synchronize: true,
         logging: false

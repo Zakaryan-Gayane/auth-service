@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { createAuthRoute } from './create-auth.route';
+import { AuthRoute } from './auth.route';
 
 const router: Router = Router()
-router.use("/api/users", createAuthRoute)
+router.use("/api/users", AuthRoute)
 export { router as indexRouter };

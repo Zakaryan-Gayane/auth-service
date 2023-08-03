@@ -7,7 +7,8 @@ import http from "http"
 import { kafka } from "./brokers/kafka";
 import { NotFoundError } from "./errors/not-found-error";
 import { errorHandler } from "./middlewares/error-handler";
-import { indexRouter } from "./routes";
+import { indexRouter } from "./routes/index";
+import { Topics } from "./constants/topics.enum";
 
 
 const port = process.env.PORT;
@@ -36,7 +37,11 @@ const start = async () => {
     try {
         await dbConnect();
         await kafka.connect(kafkaHost);
-
+        await kafka.createTopics([
+            { topic: Topics.UserCreated, partitions: 1, replicationFactor: 1 },
+           
+          ]);
+      
         httpServer.listen(port, () =>
             console.info(`Secure app listening on port ${port}`)
         );
